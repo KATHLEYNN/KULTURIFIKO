@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kulturifiko</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <body>
+    <style>
+    /* General */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f7f7;
+            color: #4A4947;
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        section {
+            padding: 50px 20px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+           font-size: 2rem;
+           margin-bottom: 10px;
+           color: #333;
+        }
+    </style>
+    
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div style="display: flex; align-items: center;">
+            <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462567709_1724925585031052_4490126238712417040_n.png?_nc_cat=109&ccb=1-7&_nc_sid=0024fc&_nc_ohc=aXcrO29n7uIQ7kNvgHCi3nC&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&oh=03_Q7cD1QEYs_r8YD6E0edmvQDXiy__0n-15fylEZhQIi5GI1RD2Q&oe=676A986A" alt="Kulturifiko Logo">
+            <h1>Kulturifiko</h1>
+        </div>
+        <div>
+            <a href="home.html" class="active">Home</a>
+            <a href="blogging-platform.html">Blogging Platform</a>
+            <a href="#">Leaderboard</a>
+            <a href="#">Cultural Database</a>
+            <a href="store.html">Store</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-btn" onclick="toggleDropdown()">Menu ▼</a>
+                <div class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+            <a href="login.html">Log In</a>
+        </div>
+    </div>
+
+    <style>
+    /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #365486;
+            padding: 20px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar img {
+            height: 50px;
+            width: auto;
+        }
+
+        .navbar h1 {
+            color: #DCF2F1;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .navbar a {
+            color: #DCF2F1;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #7FC7D9;
+            color: #0F1035;
+        }
+
+        .navbar a.active {
+            background-color: #000;
+            color: #fff;
+        }
+        
+    /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 4px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+    /* Toggle class for show/hide */
+        .show {
+            display: block;
+        }
+    </style>
+
+    <script>
+        function toggleDropdown() {
+            var dropdownContent = document.querySelector(".dropdown-content");
+            dropdownContent.classList.toggle("show");
+        }
+    </script>
+
+<!-- Store Section -->  
+<section class="store-section">
+    <div class="store-header">
+        <h1>Gamify Your Journey - Store</h1>
+        <p>Purchase your Travel Jacket and Accessories, and earn Pins and Patches as you travel!</p>
+    </div>
+
+    <div class="store-items">
+        <!-- Travel Jackets Section -->
+        <div class="store-category">
+            <h2>Travel Jackets</h2>
+            <div class="items">
+                <div class="item">
+                    <img src="travel-jacket1.jpg" alt="Travel Jacket 1">
+                    <p>Travel Jacket - $50</p>
+                    <button>Buy Now</button>
+                </div>
+                <div class="item">
+                    <img src="travel-jacket2.jpg" alt="Travel Jacket 2">
+                    <p>Travel Jacket - $60</p>
+                    <button>Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accessory Pins Section -->
+        <div class="store-category">
+            <h2>Accessory Pins</h2>
+            <div class="items">
+                <div class="item">
+                    <img src="pin1.jpg" alt="Pin 1">
+                    <p>Pin - $10</p>
+                    <button>Buy Now</button>
+                </div>
+                <div class="item">
+                    <img src="pin2.jpg" alt="Pin 2">
+                    <p>Pin - $12</p>
+                    <button>Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="earned-items">
+        <!-- Earned Items Section -->
+        <h2>Your Achievements</h2>
+
+        <!-- Earned Location Patches -->
+        <div class="earned-patches">
+            <h3>Location Patches</h3>
+            <div class="earned-items-gallery">
+                <img src="patch1.jpg" alt="Patch 1">
+                <img src="patch2.jpg" alt="Patch 2">
+            </div>
+        </div>
+
+        <!-- Earned Award Pins -->
+        <div class="earned-pins">
+            <h3>Award Pins</h3>
+            <div class="earned-items-gallery">
+                <img src="award-pin1.jpg" alt="Award Pin 1">
+                <img src="award-pin2.jpg" alt="Award Pin 2">
+            </div>
+        </div>
+    </div>
+</section>
+
+<style> 
+/* Store Section */
+    .store-section {
+        padding: 40px;
+        background-color: #f4f4f4;
+        text-align: center;
+    }
+    
+    .store-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .store-header p {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 40px;
+    }
+    
+    .store-category {
+        margin-bottom: 60px;
+    }
+    
+    .store-category h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+    
+    .store-items {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+    }
+    
+    .items {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .item img {
+        width: 200px;
+        height: auto;
+        border-radius: 8px;
+    }
+    
+    .item p {
+        font-size: 1.1rem;
+        margin: 10px 0;
+    }
+    
+    button {
+        background-color: #04c582;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background-color: #039e68;
+    }
+    
+    .earned-items h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+    
+    .earned-items-gallery {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .earned-items-gallery img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+    }
+    
+    .earned-patches, .earned-pins {
+        margin-bottom: 40px;
+    }
+    
+    .earned-patches h3, .earned-pins h3 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+</style>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Kulturifiko. All Rights Reserved.</p>
+</footer>
+
+<style>
+/* Footer */
+    footer {
+        background-color: #365486;
+        color: #fff;
+        text-align: center;
+        padding: 25px;
+        margin-top: 60px;
+    }
+</style>
+
+</body>
+</head>
+</html>
