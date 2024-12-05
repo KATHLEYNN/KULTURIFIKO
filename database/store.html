@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kulturifiko</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <body>
+    <style>
+    /* General */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f7f7;
+            color: #4A4947;
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        section {
+            padding: 50px 20px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+           font-size: 2rem;
+           margin-bottom: 10px;
+           color: #333;
+        }
+    </style>
+    
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div style="display: flex; align-items: center;">
+            <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462567709_1724925585031052_4490126238712417040_n.png?_nc_cat=109&ccb=1-7&_nc_sid=0024fc&_nc_ohc=aXcrO29n7uIQ7kNvgHCi3nC&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&oh=03_Q7cD1QEYs_r8YD6E0edmvQDXiy__0n-15fylEZhQIi5GI1RD2Q&oe=676A986A" alt="Kulturifiko Logo">
+            <h1>Kulturifiko</h1>
+        </div>
+        <div>
+            <a href="home.html" class="active">Home</a>
+            <a href="blogging-platform.html">Blogging Platform</a>
+            <a href="#">Leaderboard</a>
+            <a href="store.html">Store</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-btn" onclick="toggleDropdown()">Menu ▼</a>
+                <div class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+            <a href="login.html">Log In</a>
+        </div>
+    </div>
+
+    <style>
+    /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #365486;
+            padding: 20px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar img {
+            height: 50px;
+            width: auto;
+        }
+
+        .navbar h1 {
+            color: #DCF2F1;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .navbar a {
+            color: #DCF2F1;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #7FC7D9;
+            color: #0F1035;
+        }
+
+        .navbar a.active {
+            background-color: #000;
+            color: #fff;
+        }
+        
+    /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 4px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+    /* Toggle class for show/hide */
+        .show {
+            display: block;
+        }
+    </style>
+
+    <script>
+        function toggleDropdown() {
+            var dropdownContent = document.querySelector(".dropdown-content");
+            dropdownContent.classList.toggle("show");
+        }
+    </script>
+
+    <style>
+        /* Sidebar */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            padding-top: 90px; /* Adjust for sticky navbar */
+        }
+
+        .sidebar {
+            width: 25%;
+            background: linear-gradient(180deg, #365486 0%, #4a4f70);
+            color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            height: 100vh;
+            position: sticky;
+            top: 80px;
+            border-right: 2px solid #fff;
+        }
+
+        .sidebar h2, .sidebar h3 {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+
+        .filter-group ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .filter-group li {
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Main Content */
+        .main-content {
+            width: 75%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .category {
+            margin-bottom: 30px;
+        }
+
+        .item {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .item:hover {
+            transform: translateY(-5px);
+        }
+
+        .item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div style="display: flex; align-items: center;">
+            <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462567709_1724925585031052_4490126238712417040_n.png" alt="Kulturifiko Logo">
+            <h1>Kulturifiko</h1>
+        </div>
+        <div>
+            <a href="home.html">Home</a>
+            <a href="blogging-platform.html">Blogging Platform</a>
+            <a href="#">Leaderboard</a>
+            <a href="#">Cultural Database</a>
+            <a href="store.html" class="active">Store</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-btn">Menu ▼</a>
+            </div>
+            <a href="login.html">Log In</a>
+        </div>
+    </div>
+
+    <!-- Sidebar and Main Content -->
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Filter</h2>
+
+            <!-- Category Filter -->
+            <div class="filter-group">
+                <h3>Category</h3>
+                <ul>
+                    <li><input type="checkbox" checked> <label>Travel Jackets</label></li>
+                    <li><input type="checkbox" checked> <label>Location Patches</label></li>
+                    <li><input type="checkbox" checked> <label>Award Pins</label></li>
+                </ul>
+            </div>
+
+            <!-- Price Filter -->
+            <div class="filter-group">
+                <h3>Price</h3>
+                <ul>
+                    <li><input type="checkbox" checked> <label>Below $20</label></li>
+                    <li><input type="checkbox" checked> <label>$20 - $50</label></li>
+                    <li><input type="checkbox" checked> <label>Above $50</label></li>
+                </ul>
+            </div>
+
+            <!-- Continent Filter -->
+            <div class="filter-group">
+                <h3>Continent</h3>
+                <ul>
+                    <li><input type="checkbox" checked> <label>Asia</label></li>
+                    <li><input type="checkbox" checked> <label>Europe</label></li>
+                    <li><input type="checkbox" checked> <label>North America</label></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <h1>Travel Jacket Gamification</h1>
+                <p>Showcase your travel journey by earning patches and award pins!</p>
+            </header>
+
+            <section id="jackets" class="category">
+                <h2>Travel Jackets</h2>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/a3/1d/17/a31d17c73e9f47409249224ab6be3825.jpg" alt="Traveler's Jacket">
+                    <h3>Traveler's Jacket - Black</h3>
+                    <p> Customize with patches and pins to showcase your travels.</p>
+                </div>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/af/87/40/af87407f528719354f93fcfa46ec8376.jpg" alt="Traveler's Jacket">
+                    <h3>Traveler's Jacket - White</h3>
+                    <p> Customize with patches and pins to showcase your travels.</p>
+                </div>
+            </section>
+
+            <section id="patches" class="category">
+                <h2>Location Patches</h2>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/9a/af/da/9aafdaa6b112d11e162f19ffccf35848.jpg" alt="Location Patches">
+                    <h3>France</h3>
+                    <p> Earn this patch after completing your mountain expedition.</p>
+                </div>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/97/24/d2/9724d2b67475b58e815f784bf1e5b87f.jpg" alt="Location Patches">
+                    <h3>England</h3>
+                    <p> Earn this patch after completing your beach expedition.</p>
+                </div>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/f0/a1/93/f0a1930e115b73cbc8bf5874fd7f0137.jpg" alt="Location Patches">
+                    <h3>Japan</h3>
+                    <p> Earn this patch after completing your beach expedition.</p>
+                </div>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/c5/e4/90/c5e49085d311e8086e6a858bf759f0b9.jpg" alt="Location Patches">
+                    <h3>Australia</h3>
+                    <p> Earn this patch after completing your beach expedition.</p>
+                </div>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/df/1c/0a/df1c0a5690dc0372703e49b0d5467c67.jpg" alt="Location Patches">
+                    <h3>New York</h3>
+                    <p> Earn this patch after completing your beach expedition.</p>
+                </div>
+            </section>
+
+            <section id="pins" class="category">
+                <h2>Award Pins</h2>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/9f/83/99/9f83994532dc9a6a438c3170ceda61da.jpg" alt="Top Traveler Pin">
+                    <h3>Top Traveler Pin</h3>
+                    <p>E arn this exclusive pin for visiting the most countries!</p>
+                </div>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/8b/a4/75/8ba47514b0a30f22a6cdbd441b5d625f.jpg" alt="Top Traveler Pin">
+                    <h3>Top Traveler Pin</h3>
+                    <p> Earn this exclusive pin for visiting the most countries!</p>
+                </div>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/54/12/d0/5412d0d32778e197856a7a51459adc44.jpg" alt="Top Traveler Pin">
+                    <h3>Top Traveler Pin</h3>
+                    <p> Earn this exclusive pin for visiting the most countries!</p>
+                </div>
+                <div class="item">
+                    <img src="https://i.pinimg.com/736x/0e/28/09/0e28093e61a25157a3585252918802c1.jpg" alt="Top Traveler Pin">
+                    <h3>Top Traveler Pin</h3>
+                    <p> Earn this exclusive pin for visiting the most countries!</p>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
