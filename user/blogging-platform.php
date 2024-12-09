@@ -1,3 +1,13 @@
+<?php
+session_start();
+require 'backend/db_conn.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -431,81 +441,155 @@
  <!-- Posts Section -->
 <div class="container">
 
-    <!-- Post 1 -->
-    <div class="post">
-        <div class="post-header">
-            <img src="https://via.placeholder.com/50" alt="Profile Picture">
-            <div>
-                <div class="username">John Doe</div>
-                <div class="date">December 5, 2024 - 10:30 AM</div>
-            </div>
-        </div>
-        <div class="post-caption">Exploring the beautiful landscapes of Europe!</div>
-        <img class="post-image" src="https://www.wemove.eu/sites/wemove.eu/files/webform/campaign/69d46557-b261-44a1-bcfa-7b755f6a2eec.jpeg" alt="Post Image">
-        <div class="post-actions">
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/facebook-like.png"/>Like</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/speech-bubble.png"/>Comment</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/share.png"/>Share</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/report.png"/>Report</button>
-        </div>
-    </div>
+<?php
+$user_id = $_SESSION['user_id'];
+$isAdmin = $_SESSION['isAdmin'];
+$sql = "SELECT p.*, u.username, u.isAdmin FROM posts p 
+        LEFT JOIN users u ON p.user_id = u.id 
+        ORDER BY p.created_at DESC";
+$posts_result = $conn->query($sql);
 
-    <!-- Post 2 -->
-    <div class="post">
-        <div class="post-header">
-            <img src="https://via.placeholder.com/50" alt="Profile Picture">
-            <div>
-                <div class="username">Jane Smith</div>
-                <div class="date">December 4, 2024 - 5:45 PM</div>
-            </div>
-        </div>
-        <div class="post-caption">Sunset at the beach! 🌅</div>
-        <img class="post-image" src="https://www.andrewshoemaker.com/images/640/kamaole-3-lifeguard-beach-sunset.jpg" alt="Post Image">
-        <div class="post-actions">
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/facebook-like.png"/>Like</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/speech-bubble.png"/>Comment</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/share.png"/>Share</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/report.png"/>Report</button>
-        </div>
-    </div>
+if ($posts_result->num_rows > 0) {
+    while ($post = $posts_result->fetch_assoc()) {
+        $post_id = $post['id'];
+        $caption = $post['caption'];
+        $location = $post['location'];
+        $created_at = $post['created_at'];
+        $file_path = $post['file_path'];
+        $file_type = $post['file_type'];
+        $isAdmin_type = $post['isAdmin'];
+        $username = $post['username'] ?? 'Unknown User';
 
-    <!-- Post 3 -->
-    <div class="post">
-        <div class="post-header">
-            <img src="https://via.placeholder.com/50" alt="Profile Picture">
-            <div>
-                <div class="username">Michael Johnson</div>
-                <div class="date">December 3, 2024 - 3:15 PM</div>
-            </div>
-        </div>
-        <div class="post-caption">Had an amazing time hiking up the mountain today. 🏞️</div>
-        <img class="post-image" src="https://www.travelyukon.com/themes/custom/cossette/src/assets/images//quiz/QUESTION1/Answer2.jpg" alt="Post Image">
-        <div class="post-actions">
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/facebook-like.png"/>Like</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/speech-bubble.png"/>Comment</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/share.png"/>Share</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/report.png"/>Report</button>
-        </div>
-    </div>
+        // Get likes count
+        $likes_sql = "SELECT COUNT(*) as like_count FROM likes WHERE post_id = $post_id";
+        $likes_result = $conn->query($likes_sql);
+        $likes_count = $likes_result->fetch_assoc()['like_count'];
 
-    <!-- Post 4 -->
-    <div class="post">
-        <div class="post-header">
-            <img src="https://via.placeholder.com/50" alt="Profile Picture">
-            <div>
-                <div class="username">Emily Davis</div>
-                <div class="date">December 2, 2024 - 12:00 PM</div>
+        // Check if current user liked the post
+        $liked_sql = "SELECT * FROM likes WHERE post_id = $post_id AND user_id = $user_id";
+        $liked_result = $conn->query($liked_sql);
+        $liked = $liked_result->num_rows > 0;
+
+        // Get comments count
+        $comments_sql = "SELECT COUNT(*) as comment_count FROM comments WHERE post_id = $post_id";
+        $comments_count_result = $conn->query($comments_sql);
+        $comments_count = $comments_count_result->fetch_assoc()['comment_count'];
+
+        // Format date
+        $date = date("F j, Y - g:i A", strtotime($created_at));
+?>
+        <div class="post-container" style="max-width: 600px; margin: 20px auto; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+            <div class="post">
+                <!-- Post Header -->
+                <div class="post-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: #f8f9fa;">
+                    <div class="user-profile" style="display: flex; align-items: center;">
+                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($username); ?>&background=random" alt="Profile Picture" class="profile-pic" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+                        <div class="user-info">
+                            <h3 class="username" style="font-size: 18px; margin: 0;"><?php echo htmlspecialchars($username); ?>
+                                <?php if ($isAdmin_type == '1'): ?>
+                                    <!-- Admin Badge -->
+                                    <span class="badge" style="background-color: #007bff; color: #fff; font-size: 12px; padding: 2px 8px; border-radius: 12px; margin-left: 10px;">Admin</span>
+                                <?php endif; ?>
+                            </h3>
+                            <?php if (!empty($location)): ?>
+                                <p class="location" style="font-size: 14px; color: #6c757d; margin: 0;"><i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i> <?php echo htmlspecialchars($location); ?></p>
+                            <?php endif; ?>
+                            <span class="post-date" style="font-size: 12px; color: #6c757d;"><?php echo $date; ?></span>
+                        </div>
+                    </div>
+
+                    <!-- Delete Post Option for Admin and Post Owner -->
+                    <?php if ($user_id == $post['user_id'] || $isAdmin == '1'): ?>
+                        <form method="POST" action="delete_post.php" class="delete-post-form" style="margin: 0;">
+                            <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
+                            <button type="submit" class="delete-btn" style="background: none; border: none; color: #dc3545; cursor: pointer;" onclick="return confirm('Are you sure you want to delete this post?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Post Content -->
+                <?php if (!empty($caption)): ?>
+                    <div class="post-caption" style="padding: 15px; font-size: 16px; line-height: 1.5;">
+                        <?php echo htmlspecialchars($caption); ?>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Post Image -->
+                <?php if (!empty($file_path)): ?>
+                    <div class="post-image-container" style="width: 100%; max-height: 500px; overflow: hidden;">
+                        <img src="<?php echo htmlspecialchars($file_path); ?>" alt="Post Image" class="post-image" style="width: 100%; height: auto; object-fit: cover;">
+                    </div>
+                <?php endif; ?>
+
+                <!-- Post Actions -->
+                <div class="post-actions" style="display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #e0e0e0;">
+                    <!-- Like Button -->
+                    <form method="POST" action="like_post.php" class="like-form" style="margin: 0;">
+                        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
+                        <button type="submit" class="like-btn <?php echo $liked ? 'liked' : ''; ?>" style="background: none; border: none; display: flex; align-items: center; color: #007bff; cursor: pointer;">
+                            <i class="<?php echo $liked ? 'fas fa-heart' : 'far fa-heart'; ?>" style="margin-right: 5px;"></i>
+                            <span><?php echo $likes_count; ?> Likes</span>
+                        </button>
+                    </form>
+
+                    <!-- Comments Button -->
+                    <button class="comments-btn" onclick="toggleComments(<?php echo $post_id; ?>)" style="background: none; border: none; display: flex; align-items: center; color: #007bff; cursor: pointer;">
+                        <i class="far fa-comment" style="margin-right: 5px;"></i>
+                        <span><?php echo $comments_count; ?> Comments</span>
+                    </button>
+                </div>
+
+                <!-- Comments Section -->
+                <div id="comments-<?php echo $post_id; ?>" class="comments-section" style="display:none; padding: 15px;">
+                    <!-- Fetch and display comments -->
+                    <?php 
+                    $comments_fetch_sql = "SELECT c.*, u.username FROM comments c 
+                                           LEFT JOIN users u ON c.user_id = u.id 
+                                           WHERE c.post_id = $post_id 
+                                           ORDER BY c.created_at DESC";
+                    $comments_result = $conn->query($comments_fetch_sql);
+                    
+                    while ($comment = $comments_result->fetch_assoc()): ?>
+                        <div class="comment" style="display: flex; margin-bottom: 10px; position: relative;">
+                            <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($comment['username']); ?>&background=random" alt="Commenter" class="commenter-pic" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">
+                            <div class="comment-content" style="flex-grow: 1;">
+                                <strong style="font-size: 14px;"><?php echo htmlspecialchars($comment['username']); ?></strong>
+                                <p style="font-size: 14px; margin: 5px 0;"><?php echo htmlspecialchars($comment['comment']); ?></p>
+                                <small style="font-size: 12px; color: #6c757d;"><?php echo date("F j, Y - g:i A", strtotime($comment['created_at'])); ?></small>
+                            </div>
+                            
+                            <!-- Delete Comment Option for Admin and Comment Owner -->
+                            <?php if ($user_id == $comment['user_id'] || $isAdmin == '1'): ?>
+                                <form method="POST" action="delete_comment.php" class="delete-comment-form" style="margin: 0; position: absolute; top: 0; right: 0;">
+                                    <input type="hidden" name="comment_id" value="<?php echo $comment['id']; ?>">
+                                    <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
+                                    <button type="submit" class="delete-comment-btn" style="background: none; border: none; color: #dc3545; cursor: pointer;" onclick="return confirm('Are you sure you want to delete this comment?')">
+                                        <i class="fas fa-trash-alt" style="font-size: 12px;"></i>
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    <?php endwhile; ?>
+
+                    <!-- Comment Input Form -->
+                    <form method="POST" action="comment_post.php" class="comment-form" style="padding: 15px;">
+                        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
+                        <textarea name="comment" placeholder="Write a comment..." required style="width: 100%; min-height: 80px; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+                        <button type="submit" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Post Comment</button>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="post-caption">First snowfall of the season! ❄️</div>
-        <img class="post-image" src="https://i0.wp.com/derekmaul.blog/wp-content/uploads/2021/01/img_3642.jpeg?resize=723%2C542&ssl=1" alt="Post Image">
-        <div class="post-actions">
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/facebook-like.png"/>Like</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/speech-bubble.png"/>Comment</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/share.png"/>Share</button>
-            <button><img src="https://img.icons8.com/ios-glyphs/30/000000/report.png"/>Report</button>
-        </div>
-    </div>
+
+<?php 
+    }
+} else {
+    echo "<div class='no-posts' style='text-align: center; padding: 20px;'>No posts found</div>";
+}
+?>
+
 
 </div>
 
