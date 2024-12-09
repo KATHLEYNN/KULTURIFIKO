@@ -439,7 +439,7 @@ if (!isset($_SESSION['user_id'])) {
 <?php
 $user_id = $_SESSION['user_id'];
 $isAdmin = $_SESSION['isAdmin'];
-$sql = "SELECT p.*, u.username FROM posts p 
+$sql = "SELECT p.*, u.username, u.isAdmin FROM posts p 
         LEFT JOIN users u ON p.id = u.id 
         ORDER BY p.created_at DESC";
 $posts_result = $conn->query($sql);
@@ -452,6 +452,7 @@ if ($posts_result->num_rows > 0) {
         $created_at = $post['created_at'];
         $file_path = $post['file_path'];
         $file_type = $post['file_type'];
+        $isAdmin_type = $post['isAdmin'];
         $username = $_SESSION['username'] ?? 'Unknown User';
 
         // Get likes count
@@ -480,7 +481,7 @@ if ($posts_result->num_rows > 0) {
                         <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($username); ?>&background=random" alt="Profile Picture" class="profile-pic" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
                         <div class="user-info">
                             <h3 class="username" style="font-size: 18px; margin: 0;"><?php echo htmlspecialchars($username); ?>
-                                <?php if ($isAdmin == '1'): ?>
+                                <?php if ($isAdmin_type == '1'): ?>
                                     <!-- Admin Badge -->
                                     <span class="badge" style="background-color: #007bff; color: #fff; font-size: 12px; padding: 2px 8px; border-radius: 12px; margin-left: 10px;">Admin</span>
                                 <?php endif; ?>
