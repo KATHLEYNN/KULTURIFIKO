@@ -16,7 +16,7 @@ $comment_id = isset($_POST['comment_id']) ? intval($_POST['comment_id']) : 0;
 $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
 $user_id = $_SESSION['user_id'];
 
-$check_comment_sql = "SELECT id FROM comments WHERE id = $comment_id AND user_id = $user_id";
+$check_comment_sql = "SELECT id FROM comments WHERE id = $comment_id";
 $check_result = $conn->query($check_comment_sql);
 
 if ($check_result->num_rows === 0) {

@@ -64,7 +64,7 @@ if (!isset($_SESSION['user_id'])) {
                 <div class="dropdown-content">
                     <a href="#">Profile</a>
                     <a href="#">Settings</a>
-                    <a href="#">Logout</a>
+                    <a href="logout.php">Logout</a>
                 </div>
             </div>
             <a href="login.php">Log In</a>
@@ -438,7 +438,7 @@ if (!isset($_SESSION['user_id'])) {
 
 <?php
 $user_id = $_SESSION['user_id'];
-
+$isAdmin = $_SESSION['isAdmin'];
 $sql = "SELECT p.*, u.username FROM posts p 
         LEFT JOIN users u ON p.id = u.id 
         ORDER BY p.created_at DESC";
@@ -487,8 +487,8 @@ if ($posts_result->num_rows > 0) {
                         </div>
                     </div>
 
-                    <!-- Delete Post Option -->
-                    <?php if ($user_id == $_SESSION['user_id']): ?>
+                    <!-- Delete Post Option for Admin and Post Owner -->
+                    <?php if ($user_id == $_SESSION['user_id'] || $isAdmin == '1'): ?>
                         <form method="POST" action="delete_post.php" class="delete-post-form" style="margin: 0;">
                             <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
                             <button type="submit" class="delete-btn" style="background: none; border: none; color: #dc3545; cursor: pointer;" onclick="return confirm('Are you sure you want to delete this post?')">
@@ -549,8 +549,8 @@ if ($posts_result->num_rows > 0) {
                                 <small style="font-size: 12px; color: #6c757d;"><?php echo date("F j, Y - g:i A", strtotime($comment['created_at'])); ?></small>
                             </div>
                             
-                            <!-- Delete Comment Option -->
-                            <?php if ($user_id == $comment['user_id']): ?>
+                            <!-- Delete Comment Option for Admin and Comment Owner -->
+                            <?php if ($user_id == $comment['user_id'] || $isAdmin == '1'): ?>
                                 <form method="POST" action="delete_comment.php" class="delete-comment-form" style="margin: 0; position: absolute; top: 0; right: 0;">
                                     <input type="hidden" name="comment_id" value="<?php echo $comment['id']; ?>">
                                     <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
@@ -578,6 +578,7 @@ if ($posts_result->num_rows > 0) {
     echo "<div class='no-posts' style='text-align: center; padding: 20px;'>No posts found</div>";
 }
 ?>
+
 
 <!-- JavaScript to toggle comments -->
 <script>

@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             session_start();
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
-
+            $_SESSION['isAdmin'] = $row['isAdmin'];
             header("Location: home.php");
             exit();
         } else {
@@ -83,7 +83,7 @@ $conn->close();
                 <div class="dropdown-content">
                     <a href="#">Profile</a>
                     <a href="#">Settings</a>
-                    <a href="#">Logout</a>
+                    <a href="logout.php">Logout</a>
                 </div>
             </div>
             <a href="login.php" class="active">Log In</a>

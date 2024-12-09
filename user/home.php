@@ -1,3 +1,15 @@
+<?php
+session_start();
+require 'backend/db_conn.php';
+
+// Check if user is an admin
+$isAdmin = isset($_SESSION['isAdmin']) ? $_SESSION['isAdmin'] : '0';
+
+// Fetch events from the database
+$sql = "SELECT * FROM events ORDER BY event_date ASC";
+$events_result = $conn->query($sql);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,7 +62,7 @@
                 <div class="dropdown-content">
                     <a href="#">Profile</a>
                     <a href="#">Settings</a>
-                    <a href="#">Logout</a>
+                    <a href="logout.php">Logout</a>
                 </div>
             </div>
             <a href="login.php">Log In</a>
@@ -526,39 +538,82 @@
     <!-- Events Section -->
     <section class="events">
     <h2>Upcoming Events</h2>
-        <div class="event-card-container">
-            <!-- Event Card 1 -->
-            <div class="event-card">
-                <img src="https://bookers.s3.amazonaws.com/pages/aquecendo-antes-do-desfile-concentracao.jpg" alt="Carnival in Brazil">
-                <div class="event-card-info">
-                    <h3>Carnival in Rio de Janeiro, Brazil</h3>
-                        <p>Date: February 9 - 14, 2024</p>
-                        <p>Location: Rio de Janeiro, Brazil</p>
-                        <p>Join the world’s most famous Carnival with parades, samba dancing, and vibrant costumes.</p>
-                </div>
-            </div>
-            <!-- Event Card 2 -->
-            <div class="event-card">
-                <img src="https://media.istockphoto.com/id/1078390306/photo/beertent-hacker-pschorr-oktoberfest-2018-munich-bavaria.jpg?s=612x612&w=0&k=20&c=KYln7EoJFLQ3h1qAfPzZmnj6g4JTczi4O8oO-a7DRIA=" alt="Oktoberfest in Germany">
-                <div class="event-card-info">
-                    <h3>Oktoberfest in Munich, Germany</h3>
-                    <p>Date: September 21 - October 6, 2024</p>
-                    <p>Location: Munich, Germany</p>
-                    <p>Celebrate Bavarian culture with traditional beer, music, and food at the world’s largest folk festival.</p>
-                </div>
-            </div>
-            <!-- Event Card 3 -->
-            <div class="event-card">
-                <img src="https://cdn.mos.cms.futurecdn.net/iNSvoFmsP8XBhhLAoKcP.jpg" alt="Chinese New Year">
-                <div class="event-card-info">
-                    <h3>Chinese New Year in Beijing, China</h3>
-                    <p>Date: February 10, 2024</p>
-                    <p>Location: Beijing, China</p>
-                    <p>Experience the magic of Chinese New Year with dragon dances, fireworks, and traditional lantern festivals.</p>
-                </div>
-            </div>
+
+    <!-- Show form to add event if user is admin -->
+    <?php if ($isAdmin == '1'): ?>
+        <button onclick="toggleEventForm()" id="toggle-form-btn" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; font-size: 16px; border-radius: 5px; transition: background-color 0.3s;">
+            Add New Event
+        </button>
+
+        <div id="event-form" style="display:none; margin-top: 20px; padding: 20px; background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px; max-width: 600px; margin: 0 auto;">
+            <form method="POST" action="add_event.php" enctype="multipart/form-data" style="display: flex; flex-direction: column;">
+                <label for="event_name" style="font-size: 14px; margin-bottom: 5px;">Event Name:</label>
+                <input type="text" id="event_name" name="event_name" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                
+                <label for="event_date" style="font-size: 14px; margin-bottom: 5px;">Event Date:</label>
+                <input type="date" id="event_date" name="event_date" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                
+                <label for="event_location" style="font-size: 14px; margin-bottom: 5px;">Event Location:</label>
+                <input type="text" id="event_location" name="event_location" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                
+                <label for="event_description" style="font-size: 14px; margin-bottom: 5px;">Event Description:</label>
+                <textarea id="event_description" name="event_description" required style="padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px; min-height: 100px;"></textarea>
+                
+                <label for="event_image" style="font-size: 14px; margin-bottom: 5px;">Event Image:</label>
+                <input type="file" id="event_image" name="event_image" required style="font-size: 14px; margin-bottom: 10px;">
+                
+                <button type="submit" name="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; font-size: 16px; border-radius: 5px; transition: background-color 0.3s; margin-top: 10px;">
+                    Submit Event
+                </button>
+            </form>
         </div>
-    </section>
+    <?php endif; ?>
+
+    <!-- Event Cards -->
+    <div class="event-card-container">
+        <?php if ($events_result->num_rows > 0): ?>
+            <?php while ($event = $events_result->fetch_assoc()): ?>
+                <div class="event-card">
+                    <img src="<?php echo htmlspecialchars($event['event_image']); ?>" alt="<?php echo htmlspecialchars($event['event_name']); ?>">
+                    <div class="event-card-info">
+                        <h3><?php echo htmlspecialchars($event['event_name']); ?></h3>
+                        <p>Date: <?php echo date("F j, Y", strtotime($event['event_date'])); ?></p>
+                        <p>Location: <?php echo htmlspecialchars($event['event_location']); ?></p>
+                        <p><?php echo nl2br(htmlspecialchars($event['event_description'])); ?></p>
+                    </div>
+                    <?php if ($isAdmin == '1'): ?>
+                        <form method="POST" action="delete_event.php" style="display:inline;">
+                            <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
+                            <button type="submit" name="delete" style="padding: 5px 10px; background-color: #f44336; color: white; border: none; cursor: pointer; font-size: 14px; border-radius: 5px; transition: background-color 0.3s;">
+                                Delete Event
+                            </button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <p>No events found.</p>
+        <?php endif; ?>
+    </div>
+</section>
+
+
+    <script>
+    // Function to toggle the visibility of the event form
+    function toggleEventForm() {
+        const form = document.getElementById('event-form');
+        const button = document.getElementById('toggle-form-btn');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            button.textContent = 'Hide Event Form';
+        } else {
+            form.style.display = 'none';
+            button.textContent = 'Add New Event';
+        }
+    }
+    </script>
+
+    <?php $conn->close(); ?>
 
     <style>
     /* Events Section */
