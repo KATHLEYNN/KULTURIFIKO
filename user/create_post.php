@@ -440,7 +440,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $isAdmin = $_SESSION['isAdmin'];
 $sql = "SELECT p.*, u.username, u.isAdmin FROM posts p 
-        LEFT JOIN users u ON p.id = u.id 
+        LEFT JOIN users u ON p.user_id = u.id 
         ORDER BY p.created_at DESC";
 $posts_result = $conn->query($sql);
 
@@ -453,7 +453,7 @@ if ($posts_result->num_rows > 0) {
         $file_path = $post['file_path'];
         $file_type = $post['file_type'];
         $isAdmin_type = $post['isAdmin'];
-        $username = $_SESSION['username'] ?? 'Unknown User';
+        $username = $post['username'] ?? 'Unknown User';
 
         // Get likes count
         $likes_sql = "SELECT COUNT(*) as like_count FROM likes WHERE post_id = $post_id";
@@ -494,7 +494,7 @@ if ($posts_result->num_rows > 0) {
                     </div>
 
                     <!-- Delete Post Option for Admin and Post Owner -->
-                    <?php if ($user_id == $_SESSION['user_id'] || $isAdmin == '1'): ?>
+                    <?php if ($user_id == $post['user_id'] || $isAdmin == '1'): ?>
                         <form method="POST" action="delete_post.php" class="delete-post-form" style="margin: 0;">
                             <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
                             <button type="submit" class="delete-btn" style="background: none; border: none; color: #dc3545; cursor: pointer;" onclick="return confirm('Are you sure you want to delete this post?')">

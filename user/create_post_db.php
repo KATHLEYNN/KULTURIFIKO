@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'backend/db_conn.php';
-
+$user_id = $_SESSION['user_id'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $caption = mysqli_real_escape_string($conn, trim($_POST['postCaption']));
     $location = !empty($_POST['postLocation']) ? mysqli_real_escape_string($conn, trim($_POST['postLocation'])) : NULL;
@@ -37,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $stmt = $conn->prepare("INSERT INTO posts (caption, file_path, location, file_type) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $caption, $uploadPath, $location, $fileType);
+    $stmt = $conn->prepare("INSERT INTO posts (caption, file_path, location, file_type, user_id) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $caption, $uploadPath, $location, $fileType, $user_id);
 
     if ($stmt->execute()) {
         echo "<script>alert('Post created successfully!'); window.location.href = 'create_post.php';</script>";
