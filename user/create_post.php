@@ -479,7 +479,12 @@ if ($posts_result->num_rows > 0) {
                     <div class="user-profile" style="display: flex; align-items: center;">
                         <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($username); ?>&background=random" alt="Profile Picture" class="profile-pic" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
                         <div class="user-info">
-                            <h3 class="username" style="font-size: 18px; margin: 0;"><?php echo htmlspecialchars($username); ?></h3>
+                            <h3 class="username" style="font-size: 18px; margin: 0;"><?php echo htmlspecialchars($username); ?>
+                                <?php if ($isAdmin == '1'): ?>
+                                    <!-- Admin Badge -->
+                                    <span class="badge" style="background-color: #007bff; color: #fff; font-size: 12px; padding: 2px 8px; border-radius: 12px; margin-left: 10px;">Admin</span>
+                                <?php endif; ?>
+                            </h3>
                             <?php if (!empty($location)): ?>
                                 <p class="location" style="font-size: 14px; color: #6c757d; margin: 0;"><i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i> <?php echo htmlspecialchars($location); ?></p>
                             <?php endif; ?>
@@ -578,6 +583,7 @@ if ($posts_result->num_rows > 0) {
     echo "<div class='no-posts' style='text-align: center; padding: 20px;'>No posts found</div>";
 }
 ?>
+
 
 
 <!-- JavaScript to toggle comments -->
